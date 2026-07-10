@@ -1,9 +1,21 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-configuracoes',
-  imports: [],
-  templateUrl: './configuracoes.html',
-  styleUrl: './configuracoes.css',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './configuracoes.html'
 })
-export class Configuracoes {}
+export class Configuracoes {
+  opcoes = {
+    temaEscuro: false,
+    fonteGrande: false,
+    reduzirAnimacoes: false,
+    mostrarDicas: true,
+    alertaPrioridade: true,
+    acoesPendentes: true,
+    baixaFrequencia: false,
+    exigirTermos: true
+  };
+}

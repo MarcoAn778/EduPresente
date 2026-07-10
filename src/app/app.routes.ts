@@ -42,6 +42,11 @@ export const routes: Routes = [
           import('./pages/lgpd/lgpd').then(m => m.Lgpd)
       },
       {
+        path: 'configuracoes',
+        loadComponent: () =>
+          import('./pages/configuracoes/configuracoes').then(m => m.Configuracoes)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

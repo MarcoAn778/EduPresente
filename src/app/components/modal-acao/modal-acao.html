@@ -1,0 +1,52 @@
+<dialog #modal class="rounded-2xl p-0 w-full max-w-lg backdrop:bg-black/50 shadow-2xl">
+  <div class="p-6">
+    <div class="flex justify-between items-start mb-6">
+      <div class="flex items-center gap-3">
+        <div class="bg-blue-900 text-white p-2 rounded-lg"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.5 3.75a3 3 0 0 0-3 3v12.75a3 3 0 0 0 3 3h1.5a3 3 0 0 0 3-3V6.75a3 3 0 0 0-3-3h-1.5Z"/></svg></div>
+        <div>
+          <h3 class="font-bold text-[#071e3d]">Registrar nova ação</h3>
+          <p class="text-xs text-slate-500">{{ nomeAluno ? 'Para: ' + nomeAluno : 'Selecione um estudante' }}</p>
+        </div>
+      </div>
+      <button (click)="fechar()" class="text-slate-400 hover:text-black">✕</button>
+    </div>
+
+    <div class="space-y-4">
+      <div *ngIf="!nomeAluno">
+        <label class="text-xs font-bold text-slate-500 uppercase">Estudante</label>
+        <select class="w-full p-2.5 border rounded-lg mt-1">
+          <option>Selecione o aluno...</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-slate-500 uppercase">Tipo de ação</label>
+        <select class="w-full p-2.5 border rounded-lg mt-1"><option>Selecione uma opção...</option></select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="text-xs font-bold text-slate-500 uppercase">Responsável</label><input type="text" class="w-full p-2.5 border rounded-lg mt-1" placeholder="Mariana Silva"></div>
+        <div><label class="text-xs font-bold text-slate-500 uppercase">Data</label><input type="date" class="w-full p-2.5 border rounded-lg mt-1"></div>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-slate-500 uppercase">Status</label>
+        <div class="flex gap-2 mt-1">
+          <button class="flex-1 py-2 border rounded-lg bg-[#071e3d] text-white text-sm">Pendente</button>
+          <button class="flex-1 py-2 border rounded-lg hover:bg-slate-50 text-sm">Em andamento</button>
+          <button class="flex-1 py-2 border rounded-lg hover:bg-slate-50 text-sm">Concluída</button>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-slate-500 uppercase">Observação</label>
+        <textarea class="w-full p-2.5 border rounded-lg mt-1 h-24" placeholder="Descreva os detalhes da ação..."></textarea>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-8">
+      <button (click)="fechar()" class="flex-1 py-2.5 border rounded-lg font-semibold hover:bg-slate-50">Cancelar</button>
+      <button (click)="fechar()" class="flex-1 py-2.5 bg-[#071e3d] text-white rounded-lg font-semibold hover:bg-[#0a2b5e]">Salvar Ação</button>
+    </div>
+  </div>
+</dialog>
