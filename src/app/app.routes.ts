@@ -32,6 +32,11 @@ export const routes: Routes = [
           import('./pages/estudante-perfil/estudante-perfil').then(m => m.EstudantePerfil)
       },
       {
+        path: 'historico',
+        loadComponent: () =>
+          import('./pages/historico/historico').then(m => m.Historico)
+      },
+      {
         path: 'lgpd',
         loadComponent: () =>
           import('./pages/lgpd/lgpd').then(m => m.Lgpd)
