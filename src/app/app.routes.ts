@@ -32,19 +32,19 @@ export const routes: Routes = [
           import('./pages/estudante-perfil/estudante-perfil').then(m => m.EstudantePerfil)
       },
       {
-        path: 'relatorios',
+        path: 'lgpd',
         loadComponent: () =>
-          import('./pages/relatorios/relatorios').then(m => m.Relatorios)
+          import('./pages/lgpd/lgpd').then(m => m.Lgpd)
       },
       {
-        path: '', // Se acessar apenas /app, redireciona para /app/dashboard [cite: 258]
+        path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
       }
     ]
   },
   {
-    path: '**', // Rota coringa para páginas não encontradas [cite: 259]
+    path: '**',
     redirectTo: 'login'
   }
 ];
