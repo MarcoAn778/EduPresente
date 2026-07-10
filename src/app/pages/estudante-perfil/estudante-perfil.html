@@ -1,0 +1,218 @@
+<div class="flex flex-col gap-6 w-full max-w-screen-2xl mx-auto pb-8">
+
+  <div class="flex flex-col gap-3">
+    <div>
+      <button (click)="voltar()" class="flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#071e3d] hover:-translate-x-1 transition-all duration-300 select-none">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Voltar
+      </button>
+    </div>
+    
+    <div class="text-xs text-slate-400 font-medium select-none flex items-center gap-1">
+      <a routerLink="/app/alunos" class="hover:text-[#071e3d] transition-colors">Estudantes</a>
+      <span>></span>
+      <span class="text-[#071e3d]">Lucas Andrade</span>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-6">
+    <div class="flex items-center gap-4">
+      <img src="https://i.pravatar.cc/150?img=11" alt="Foto do estudante" class="w-16 h-16 rounded-full object-cover border-2 border-slate-200 shadow-sm">
+      
+      <div>
+        <h1 class="text-3xl font-bold text-[#071e3d]">Lucas Andrade</h1>
+        <p class="text-sm text-slate-500 mt-1">2º ano B &bull; Matrícula: 20240912</p>
+      </div>
+    </div>
+    
+    <div class="flex gap-2 select-none">
+      <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1.5 rounded-md flex items-center gap-1.5 shadow-sm">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+        </svg>
+        Atenção prioritária
+      </span>
+      <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1.5 rounded-md shadow-sm">
+        Em acompanhamento
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        
+        <div>
+          <p class="text-[10px] font-bold text-slate-500 uppercase select-none mb-1">Frequência</p>
+          <p class="text-3xl font-bold text-red-600 mb-2">68%</p>
+          <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+            <div class="h-full bg-red-600 rounded-full w-[68%]"></div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold text-slate-500 uppercase select-none mb-1">Média Geral</p>
+          <p class="text-3xl font-bold text-[#071e3d] mb-1">5.4</p>
+          <p class="text-xs font-semibold text-red-600 flex items-center gap-1 select-none">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.51m-3.182 5.51l-5.511-3.181" />
+            </svg>
+            -0.8 vs mês anterior
+          </p>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold text-slate-500 uppercase select-none mb-1">Faltas no mês</p>
+          <p class="text-3xl font-bold text-[#071e3d] mb-1">8</p>
+          <p class="text-xs text-slate-500 select-none">Limite: 5 / mês</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button class="bg-slate-100 border border-slate-200 text-[#071e3d] hover:bg-[#071e3d] hover:text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 select-none">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Ver Histórico
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-red-600 p-6 flex flex-col justify-center">
+      <h3 class="text-sm font-bold text-[#071e3d] mb-4 flex items-center gap-2 select-none">
+        <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        Sinais de Atenção
+      </h3>
+      <ul class="flex flex-col gap-3 text-xs text-slate-600 select-none">
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 mt-1 shrink-0"></span>
+          Frequência abaixo de 75%
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 mt-1 shrink-0"></span>
+          Queda acentuada no desempenho
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 mt-1 shrink-0"></span>
+          Faltas recorrentes às sextas-feiras
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#071e3d] mt-1 shrink-0"></span>
+          Necessidade de contato familiar imediato
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+      <div class="flex justify-between items-center mb-6 select-none">
+        <h3 class="text-sm font-bold text-[#071e3d]">Evolução de Frequência</h3>
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Últimos 4 meses</span>
+      </div>
+      <div class="h-40">
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
+      <div class="flex justify-between items-center mb-auto select-none">
+        <h3 class="text-sm font-bold text-[#071e3d]">Evolução Pedagógica</h3>
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Média por Bimestre</span>
+      </div>
+      
+      <div class="flex justify-around items-end mt-8 pb-4">
+        <div class="text-center">
+          <p class="text-3xl font-bold text-[#071e3d] mb-1">6.8</p>
+          <p class="text-[10px] font-bold text-slate-500 select-none">1º BIM</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold text-red-600 mb-1">5.4</p>
+          <p class="text-[10px] font-bold text-[#071e3d] select-none">2º BIM</p>
+        </div>
+        <div class="text-center opacity-40">
+          <p class="text-3xl font-bold text-slate-400 mb-1">---</p>
+          <p class="text-[10px] font-bold text-slate-400 select-none">3º BIM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-hidden">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-sm font-bold text-[#071e3d] select-none">Ações Pedagógicas Recentes</h3>
+      <button class="text-sm font-bold text-[#071e3d] hover:text-[#0a2b5e] flex items-center gap-1 hover:underline select-none">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Nova Ação
+      </button>
+    </div>
+
+    <div class="overflow-x-auto -mx-6 px-6">
+      <table class="w-full text-left border-collapse min-w-[600px]">
+        <thead>
+          <tr class="border-b border-slate-200 text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">
+            <th class="py-3">Ação</th>
+            <th class="py-3">Responsável</th>
+            <th class="py-3">Data</th>
+            <th class="py-3">Status</th>
+            <th class="py-3 text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-sm">
+          
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-4 font-semibold text-[#071e3d]">Contato com responsável</td>
+            <td class="py-4 text-slate-600">Mariana Silva (Coord.)</td>
+            <td class="py-4 text-slate-600">14 Jun 2026</td>
+            <td class="py-4">
+              <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded select-none">Pendente</span>
+            </td>
+            <td class="py-4 text-right">
+              <button class="p-1 text-slate-400 hover:text-[#071e3d] transition-colors rounded">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd" /></svg>
+              </button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-4 font-semibold text-[#071e3d]">Conversa individual</td>
+            <td class="py-4 text-slate-600">Prof. Roberto</td>
+            <td class="py-4 text-slate-600">10 Jun 2026</td>
+            <td class="py-4">
+              <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded select-none">Concluída</span>
+            </td>
+            <td class="py-4 text-right">
+              <button class="p-1 text-slate-400 hover:text-[#071e3d] transition-colors rounded">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd" /></svg>
+              </button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-4 font-semibold text-[#071e3d]">Reforço escolar</td>
+            <td class="py-4 text-slate-600">Núcleo Pedagógico</td>
+            <td class="py-4 text-slate-600">Em andamento</td>
+            <td class="py-4">
+              <span class="bg-blue-100 text-[#071e3d] text-xs font-bold px-2 py-1 rounded select-none">Em andamento</span>
+            </td>
+            <td class="py-4 text-right">
+              <button class="p-1 text-slate-400 hover:text-[#071e3d] transition-colors rounded">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd" /></svg>
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

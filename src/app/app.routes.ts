@@ -27,6 +27,11 @@ export const routes: Routes = [
           import('./pages/alunos/alunos').then(m => m.Alunos)
       },
       {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./pages/estudante-perfil/estudante-perfil').then(m => m.EstudantePerfil)
+      },
+      {
         path: 'relatorios',
         loadComponent: () =>
           import('./pages/relatorios/relatorios').then(m => m.Relatorios)
