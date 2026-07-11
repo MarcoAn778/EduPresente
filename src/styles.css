@@ -2,6 +2,9 @@
 
 @import 'tailwindcss';
 
+button:not(:disabled) { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+
 /* No seu styles.css ou dentro do componente com ViewEncapsulation.None */
 .toggle {
   appearance: none;

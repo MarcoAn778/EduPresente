@@ -21,4 +21,15 @@ describe('MainLayout', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve permitir rolagem vertical do conteúdo em telas pequenas', () => {
+    fixture.detectChanges();
+
+    const main: HTMLElement = fixture.nativeElement.querySelector('main');
+    const conteiner: HTMLElement = main.parentElement as HTMLElement;
+
+    expect(conteiner.classList.contains('min-h-0')).toBe(true);
+    expect(main.classList.contains('min-h-0')).toBe(true);
+    expect(main.classList.contains('overflow-y-auto')).toBe(true);
+  });
 });

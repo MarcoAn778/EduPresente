@@ -26,7 +26,7 @@ export class DadosService {
   readonly compromissosSincronizados$ = this.compromissosSincronizados.asObservable();
 
   listarAlunos(): Aluno[] {
-    this.cacheAlunos ??= this.lerLocal(this.chaveAlunos, ALUNOS_SIMULADOS);
+    this.cacheAlunos ??= this.mesclarPadrao(this.lerLocal(this.chaveAlunos, ALUNOS_SIMULADOS), ALUNOS_SIMULADOS);
     if (!this.cacheAlunos.length) {
       this.cacheAlunos = structuredClone(ALUNOS_SIMULADOS);
       this.salvarLocal(this.chaveAlunos, this.cacheAlunos);
@@ -40,7 +40,7 @@ export class DadosService {
   }
 
   listarAcoes(alunoId?: string): AcaoPedagogica[] {
-    this.cacheAcoes ??= this.lerLocal(this.chaveAcoes, ACOES_SIMULADAS);
+    this.cacheAcoes ??= this.mesclarPadrao(this.lerLocal(this.chaveAcoes, ACOES_SIMULADAS), ACOES_SIMULADAS);
     if (!this.cacheAcoes.length) {
       this.cacheAcoes = structuredClone(ACOES_SIMULADAS);
       this.salvarLocal(this.chaveAcoes, this.cacheAcoes);
@@ -75,7 +75,7 @@ export class DadosService {
   }
 
   listarCompromissos(): Compromisso[] {
-    this.cacheCompromissos ??= this.lerLocal(this.chaveCompromissos, COMPROMISSOS_SIMULADOS);
+    this.cacheCompromissos ??= this.mesclarPadrao(this.lerLocal(this.chaveCompromissos, COMPROMISSOS_SIMULADOS), COMPROMISSOS_SIMULADOS);
     if (!this.cacheCompromissos.length) {
       this.cacheCompromissos = structuredClone(COMPROMISSOS_SIMULADOS);
       this.salvarLocal(this.chaveCompromissos, this.cacheCompromissos);
@@ -147,6 +147,12 @@ export class DadosService {
 
   private salvarLocal<T>(chave: string, valor: T): void {
     if (typeof localStorage !== 'undefined') localStorage.setItem(chave, JSON.stringify(valor));
+  }
+
+  private mesclarPadrao<T extends { id: string }>(atuais: T[], padrao: T[]): T[] {
+    const idsAtuais = new Set(atuais.map(item => item.id));
+    const novos = padrao.filter(item => !idsAtuais.has(item.id));
+    return novos.length ? [...atuais, ...structuredClone(novos)] : atuais;
   }
 
   private sincronizarAlunosEmSegundoPlano(): void {
