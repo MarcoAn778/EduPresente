@@ -26,3 +26,58 @@
   transition: 0.3s;
 }
 .toggle:checked::before { transform: translateX(20px); }
+
+html.edupresente-fonte-grande { font-size: 18px; }
+html.edupresente-reduzir-animacoes *,
+html.edupresente-reduzir-animacoes *::before,
+html.edupresente-reduzir-animacoes *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+html.edupresente-dark { color-scheme: dark; }
+html.edupresente-dark body,
+html.edupresente-dark .bg-\[\#f4f7f6\] { background-color: #0f172a !important; }
+html.edupresente-dark .bg-white { background-color: #1e293b !important; }
+html.edupresente-dark .bg-\[\#f0f4f8\],
+html.edupresente-dark .bg-slate-50 { background-color: #172033 !important; }
+html.edupresente-dark .border-slate-100,
+html.edupresente-dark .border-slate-200,
+html.edupresente-dark .border-slate-300 { border-color: #475569 !important; }
+html.edupresente-dark .text-slate-800,
+html.edupresente-dark .text-slate-700,
+html.edupresente-dark .text-slate-600 { color: #e2e8f0 !important; }
+html.edupresente-dark .text-slate-500,
+html.edupresente-dark .text-slate-400 { color: #94a3b8 !important; }
+html.edupresente-dark .bg-white > .text-\[\#071e3d\],
+html.edupresente-dark .bg-white .text-\[\#071e3d\],
+html.edupresente-dark .bg-white h1.text-\[\#071e3d\],
+html.edupresente-dark .bg-white h2.text-\[\#071e3d\],
+html.edupresente-dark .bg-white h3.text-\[\#071e3d\],
+html.edupresente-dark header .text-\[\#071e3d\] { color: #e2e8f0 !important; }
+html.edupresente-dark input,
+html.edupresente-dark select,
+html.edupresente-dark textarea,
+html.edupresente-dark dialog { background-color: #1e293b; color: #e2e8f0; border-color: #475569; }
+html.edupresente-dark input::placeholder,
+html.edupresente-dark textarea::placeholder { color: #64748b; }
+html.edupresente-dark .toggle { background-color: #475569 !important; border: 1px solid #64748b; }
+html.edupresente-dark .toggle:checked { background-color: #22c55e !important; border-color: #22c55e; }
+html.edupresente-dark .toggle::before { background-color: #f8fafc; box-shadow: 0 1px 3px rgb(0 0 0 / 40%); }
+html.edupresente-dark .hover\:bg-slate-50:hover,
+html.edupresente-dark .hover\:bg-slate-100:hover,
+html.edupresente-dark .hover\:bg-slate-200:hover { background-color: #334155 !important; }
+html.edupresente-dark .hover\:bg-blue-50:hover { background-color: #1e3a5f !important; }
+html.edupresente-dark .hover\:text-\[\#071e3d\]:hover,
+html.edupresente-dark .group:hover .group-hover\:text-\[\#071e3d\] { color: #86efac !important; }
+html.edupresente-dark .bg-\[\#86efac\].text-\[\#071e3d\],
+html.edupresente-dark .bg-blue-100.text-\[\#071e3d\] { color: #071e3d !important; }
+html.edupresente-dark .bg-blue-50 { background-color: #1e3a5f !important; }
+html.edupresente-dark canvas { filter: brightness(1.25) contrast(0.9); }
+html.edupresente-dark .mobile-bottom-nav { background-color: #1e293b !important; }
+html.edupresente-dark .mobile-bottom-nav .text-\[\#071e3d\] { color: #86efac !important; }
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); height: calc(4rem + env(safe-area-inset-bottom)); }
+}

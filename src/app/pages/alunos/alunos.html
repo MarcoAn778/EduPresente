@@ -15,7 +15,7 @@
                 cada aluno.
             </p>
         </div>
-        <button class="cursor-pointer bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:text-[#071e3d] hover:scale-105 px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 select-none shadow-sm shrink-0">
+        <button (click)="exportarRelatorio()" class="cursor-pointer bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:text-[#071e3d] hover:scale-105 px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 select-none shadow-sm shrink-0">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -35,56 +35,42 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-                    <input type="text" placeholder="Nome ou CPF..."
+                    <input [(ngModel)]="busca" (ngModelChange)="aplicarFiltros()" type="text" placeholder="Nome ou CPF..."
                         class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-[#071e3d] focus:ring-1 focus:ring-[#071e3d]">
                 </div>
             </div>
 
             <div class="lg:col-span-1">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5 select-none">Ano</label>
-                <select class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
-                    <option>Todos os anos</option>
-                    <option>1º Ano</option>
-                    <option>2º Ano</option>
-                    <option>3º Ano</option>
+                <select [(ngModel)]="ano" (ngModelChange)="aplicarFiltros()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
+                    <option value="">Todos os anos</option>
+                    <option value="1º Ano">1º Ano</option><option value="2º Ano">2º Ano</option><option value="3º Ano">3º Ano</option>
                 </select>
             </div>
 
             <div class="lg:col-span-1">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5 select-none">Turno</label>
-                <select class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
-                    <option>Todos os turnos</option>
-                    <option>Matutino</option>
-                    <option>Vespertino</option>
-                    <option>Noturno</option>
+                <select [(ngModel)]="turno" (ngModelChange)="aplicarFiltros()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
+                    <option value="">Todos os turnos</option><option value="Matutino">Matutino</option><option value="Vespertino">Vespertino</option><option value="Noturno">Noturno</option>
                 </select>
             </div>
 
             <div class="lg:col-span-1">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5 select-none">Atenção</label>
-                <select class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
-                    <option>Nível de Atenção</option>
-                    <option>Leve</option>
-                    <option>Moderada</option>
-                    <option>Prioritária</option>
+                <select [(ngModel)]="atencao" (ngModelChange)="aplicarFiltros()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
+                    <option value="">Nível de Atenção</option><option value="Leve">Leve</option><option value="Moderada">Moderada</option><option value="Prioritária">Prioritária</option>
                 </select>
             </div>
 
             <div class="lg:col-span-1">
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5 select-none">Status</label>
-                <select class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
-                    <option>Todos os status</option>
-                    <option>Acompanhamento</option>
-                    <option>Pendente</option>
-                    <option>Concluído</option>
+                <select [(ngModel)]="status" (ngModelChange)="aplicarFiltros()" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-[#071e3d]">
+                    <option value="">Todos os status</option><option value="Acompanhamento">Acompanhamento</option><option value="Pendente">Pendente</option><option value="Concluído">Concluído</option>
                 </select>
             </div>
 
-            <div class="lg:col-span-1 flex gap-2 h-[38px]">
-                <button class="cursor-pointer flex-1 bg-[#071e3d] hover:bg-[#0a2b5e] text-white text-sm font-semibold rounded-lg transition-colors select-none">
-                    Filtrar
-                </button>
-                <button class="cursor-pointer w-[38px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 rounded-lg transition-colors shrink-0 select-none">
+            <div class="lg:col-span-1 flex justify-end h-[38px]">
+                <button (click)="limparFiltros()" title="Limpar filtros" class="cursor-pointer w-[38px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 rounded-lg transition-colors shrink-0 select-none">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
@@ -113,17 +99,17 @@
                 </thead>
 
                 <tbody class="divide-y divide-slate-100">
-                    <tr *ngFor="let aluno of listaAlunos" class="hover:bg-slate-50 transition-colors group">
+                    <tr *ngFor="let aluno of alunosPaginados; let i = index" class="hover:bg-slate-50 transition-colors group">
 
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm select-none"
-                                    [ngClass]="aluno.corInitials">
-                                    {{ aluno.iniciais }}
+                                    [ngClass]="getCorIniciais(i)">
+                                    {{ getIniciais(aluno.nome) }}
                                 </div>
                                 <div>
                                     <p class="text-sm font-bold text-[#071e3d] leading-tight">{{ aluno.nome }}</p>
-                                    <p class="text-xs text-slate-400">CPF: {{ aluno.cpf }}</p>
+                                    <p class="text-xs text-slate-400">CPF: {{ aluno.cpfMascarado }}</p>
                                 </div>
                             </div>
                         </td>
@@ -160,8 +146,8 @@
 
                         <td class="px-6 py-4 text-center">
                             <span class="text-[11px] font-bold px-2.5 py-1 rounded-full select-none"
-                                [ngClass]="getBadgeAtencao(aluno.atencao)">
-                                {{ aluno.atencao }}
+                                [ngClass]="getBadgeAtencao(aluno.prioridade)">
+                                {{ aluno.prioridade }}
                             </span>
                         </td>
 
@@ -174,32 +160,28 @@
                         </td>
 
                         <td class="px-6 py-4 text-right">
-                            <a href="app/perfil" class="text-sm font-semibold text-[#071e3d] hover:underline select-none">Ver perfil</a>
+                            <a [routerLink]="['/app/perfil', aluno.id]" class="text-sm font-semibold text-[#071e3d] hover:underline select-none">Ver perfil</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between">
+        <div class="bg-slate-50 border-t border-slate-200 px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
             <span class="text-xs text-slate-500 select-none">Mostrando <strong
-                    class="text-slate-700 font-bold">1-4</strong> de <strong
-                    class="text-slate-700 font-bold">128</strong> estudantes</span>
+                    class="text-slate-700 font-bold">{{ inicioExibido }}-{{ fimExibido }}</strong> de <strong
+                    class="text-slate-700 font-bold">{{ alunosFiltrados.length }}</strong> estudantes</span>
 
-            <div class="flex items-center gap-1 select-none">
+            <div class="flex flex-wrap items-center justify-center gap-1 select-none">
                 <button
                     class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-400 hover:bg-slate-100 disabled:opacity-50"
-                    disabled>
+                    (click)="irParaPagina(paginaAtual - 1)" [disabled]="paginaAtual === 1">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button class="w-8 h-8 flex items-center justify-center rounded bg-[#071e3d] text-white text-xs font-bold">1</button>
-                <button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-xs font-medium">2</button>
-                <button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-xs font-medium">3</button>
-                <span class="text-slate-400 text-xs px-1">...</span>
-                <button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 text-xs font-medium">32</button>
-                <button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-600">
+                <button *ngFor="let pagina of paginas" (click)="irParaPagina(pagina)" [ngClass]="pagina === paginaAtual ? 'bg-[#071e3d] text-white font-bold' : 'border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 font-medium'" class="w-8 h-8 flex items-center justify-center rounded text-xs">{{ pagina }}</button>
+                <button (click)="irParaPagina(paginaAtual + 1)" [disabled]="paginaAtual === totalPaginas" class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 disabled:opacity-50">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
@@ -219,7 +201,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-500 uppercase select-none">Atenção Prioritária</p>
-                <p class="text-xl font-bold text-red-600">12 Alunos</p>
+                <p class="text-xl font-bold text-red-600">{{ totalPrioritarios }} Alunos</p>
             </div>
         </div>
 
@@ -232,7 +214,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-500 uppercase select-none">Em Acompanhamento</p>
-                <p class="text-xl font-bold text-green-600">45 Alunos</p>
+                <p class="text-xl font-bold text-green-600">{{ totalAcompanhamento }} Alunos</p>
             </div>
         </div>
 
@@ -245,7 +227,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-500 uppercase select-none">Casos Pendentes</p>
-                <p class="text-xl font-bold text-yellow-600">08 Alunos</p>
+                <p class="text-xl font-bold text-yellow-600">{{ totalPendentes }} Alunos</p>
             </div>
         </div>
 
@@ -258,7 +240,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-500 uppercase select-none">Taxa de Presença Média</p>
-                <p class="text-xl font-bold text-[#071e3d]">84.2%</p>
+                <p class="text-xl font-bold text-[#071e3d]">{{ frequenciaMedia | number:'1.1-1' }}%</p>
             </div>
         </div>
 

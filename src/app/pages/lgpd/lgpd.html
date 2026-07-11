@@ -13,7 +13,7 @@
     </h1>
     
     <p class="text-slate-600 leading-relaxed text-sm">
-      O EduPresente é um protótipo acadêmico e não utiliza dados reais de estudantes. A aplicação propõe boas práticas de visualização responsável, evitando exposição, rótulos negativos e decisões automatizadas sem análise humana[cite: 112].
+      O EduPresente é um protótipo acadêmico e não utiliza dados reais de estudantes. A aplicação propõe boas práticas de visualização responsável, evitando exposição, rótulos negativos e decisões automatizadas sem análise humana.
     </p>
   </div>
 
@@ -95,10 +95,10 @@
   <div class="border-t border-slate-200 pt-6 flex flex-col md:flex-row items-center justify-center gap-4">
     
     <div class="flex items-center gap-3 select-none">
-      <button class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+      <button (click)="imprimirPolitica()" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
         Baixar PDF Ético
       </button>
-      <button class="bg-[#071e3d] text-white hover:bg-[#0a2b5e] px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+      <button (click)="revisarLei()" class="bg-[#071e3d] text-white hover:bg-[#0a2b5e] px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
         Revisar Políticas
       </button>
     </div>

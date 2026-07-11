@@ -1,7 +1,7 @@
 <div class="min-h-screen flex items-center justify-center bg-slate-100 p-4 font-sans">
-  <div class="bg-white p-8 md:p-10 rounded-xl shadow-lg w-full max-w-md">
+  <div class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-lg w-full max-w-md">
     <div class="flex justify-center mb-6">
-      <img src="/img/EduPresenteLogo.png" alt="Logo EduPresente" class="h-60 object-contain" />
+      <img src="/img/EduPresenteLogo.png" alt="Logo EduPresente" class="h-40 sm:h-52 md:h-60 object-contain" />
     </div>
 
     <div>
@@ -43,7 +43,7 @@
           <div class="flex justify-between items-center mb-2">
             <label for="senha" class="text-sm font-semibold text-slate-700">Senha</label>
             <a
-              href="#"
+              href="mailto:suporte@escola.com?subject=Recuperação de senha - EduPresente"
               class="text-xs text-slate-500 hover:text-[#071e3d] hover:underline transition-colors"
               >Esqueci minha senha</a
             >
@@ -78,10 +78,12 @@
             <button
               type="button"
               (click)="toggleSenha()"
+              [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
+              [attr.title]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
               class="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
             >
               <svg
-                *ngIf="!mostrarSenha"
+                *ngIf="mostrarSenha"
                 class="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -95,7 +97,7 @@
                 />
               </svg>
               <svg
-                *ngIf="mostrarSenha"
+                *ngIf="!mostrarSenha"
                 class="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -126,7 +128,7 @@
             <span class="group-hover:text-slate-700 transition-colors">Manter conectado</span>
           </label>
 
-          <label class="flex items-center gap-2 text-sm text-slate-500 cursor-pointer group">
+          <label *ngIf="exigirTermos" class="flex items-center gap-2 text-sm text-slate-500 cursor-pointer group">
             <input
               type="checkbox"
               formControlName="termos"
@@ -134,7 +136,7 @@
             />
             <span class="group-hover:text-slate-700 transition-colors">
               Li e aceito os
-              <a routerLink="/app/lgpd" class="text-[#071e3d] font-semibold hover:underline"
+              <a routerLink="/lgpd" class="text-[#071e3d] font-semibold hover:underline"
                 >termos e condições</a
               >
             </span>
@@ -151,10 +153,10 @@
         <button
           type="button"
           (click)="onSubmit()"
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm.invalid || processando"
           class="w-full bg-[#071e3d] hover:bg-[#0a2b5e] disabled:bg-slate-400 text-white font-semibold py-3.5 rounded-lg flex justify-center items-center gap-2 transition-all cursor-pointer disabled:cursor-not-allowed"
         >
-          Entrar
+          {{ processando ? 'Entrando...' : 'Entrar' }}
           <svg
             class="w-5 h-5"
             fill="none"

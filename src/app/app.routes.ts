@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
   {
@@ -12,7 +13,13 @@ export const routes: Routes = [
       import('./pages/login/login').then(m => m.Login)
   },
   {
+    path: 'lgpd',
+    loadComponent: () => import('./pages/lgpd/lgpd').then(m => m.Lgpd)
+  },
+  {
     path: 'app',
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     loadComponent: () =>
       import('./components/main-layout/main-layout').then(m => m.MainLayoutComponent),
     children: [
@@ -27,12 +34,17 @@ export const routes: Routes = [
           import('./pages/alunos/alunos').then(m => m.Alunos)
       },
       {
-        path: 'perfil',
+        path: 'agenda',
+        loadComponent: () =>
+          import('./pages/agenda/agenda').then(m => m.Agenda)
+      },
+      {
+        path: 'perfil/:id',
         loadComponent: () =>
           import('./pages/estudante-perfil/estudante-perfil').then(m => m.EstudantePerfil)
       },
       {
-        path: 'historico',
+        path: 'historico/:id',
         loadComponent: () =>
           import('./pages/historico/historico').then(m => m.Historico)
       },

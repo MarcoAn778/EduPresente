@@ -1,63 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Aluno } from '../../models/edupresente.models';
+import { DadosService } from '../../services/dados';
 
-interface Aluno {
-  iniciais: string;
-  nome: string;
-  cpf: string;
-  ano: string;
-  turno: string;
-  frequencia: number;
-  media: number;
-  faltas: number;
-  atencao: 'Leve' | 'Moderada' | 'Prioritária';
-  status: 'Pendente' | 'Acompanhamento' | 'Concluído';
-  corInitials: string;
-}
+@Component({ selector: 'app-alunos', standalone: true, imports: [CommonModule, FormsModule, RouterModule], templateUrl: './alunos.html' })
+export class Alunos implements OnInit {
+  private readonly dados = inject(DadosService);
+  listaAlunos: Aluno[] = [];
+  carregando = true;
+  busca = ''; ano = ''; turno = ''; atencao = ''; status = '';
+  paginaAtual = 1;
+  readonly itensPorPagina = 5;
 
-@Component({
-  selector: 'app-alunos',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './alunos.html'
-})
-export class Alunos {
-  
-  listaAlunos: Aluno[] = [
-    { iniciais: 'AB', nome: 'Ana Beatriz Silva', cpf: '452.***.***-01', ano: '3º Ano', turno: 'Matutino', frequencia: 65, media: 7.2, faltas: 8, atencao: 'Prioritária', status: 'Pendente', corInitials: 'bg-blue-100 text-[#071e3d]' },
-    { iniciais: 'RL', nome: 'Rafael Lima Santos', cpf: '128.***.***-54', ano: '3º Ano', turno: 'Matutino', frequencia: 92, media: 8.5, faltas: 1, atencao: 'Leve', status: 'Acompanhamento', corInitials: 'bg-green-100 text-green-700' },
-    { iniciais: 'MM', nome: 'Mariana Mendes', cpf: '832.***.***-12', ano: '2º Ano', turno: 'Vespertino', frequencia: 78, media: 6.1, faltas: 4, atencao: 'Moderada', status: 'Acompanhamento', corInitials: 'bg-blue-100 text-[#071e3d]' },
-    { iniciais: 'JP', nome: 'João Pedro Costa', cpf: '622.***.***-99', ano: '1º Ano', turno: 'Matutino', frequencia: 88, media: 9.0, faltas: 2, atencao: 'Leve', status: 'Concluído', corInitials: 'bg-slate-200 text-slate-700' }
-  ];
-
-  getBadgeAtencao(atencao: string): string {
-    switch (atencao) {
-      case 'Prioritária': return 'bg-red-100 text-red-700';
-      case 'Moderada': return 'bg-yellow-100 text-yellow-700';
-      case 'Leve': return 'bg-green-100 text-green-700';
-      default: return 'bg-slate-100 text-slate-700';
-    }
+  ngOnInit(): void { this.listaAlunos = this.dados.listarAlunos(); this.carregando = false; }
+  get alunosFiltrados(): Aluno[] {
+    const termo = this.busca.trim().toLocaleLowerCase('pt-BR');
+    return this.listaAlunos.filter(a => (!termo || a.nome.toLocaleLowerCase('pt-BR').includes(termo) || a.cpfMascarado.includes(termo)) && (!this.ano || a.ano === this.ano) && (!this.turno || a.turno === this.turno) && (!this.atencao || a.prioridade === this.atencao) && (!this.status || a.status === this.status));
   }
-
-  getDotStatus(status: string): string {
-    switch (status) {
-      case 'Pendente': return 'bg-yellow-400';
-      case 'Acompanhamento': return 'bg-green-600';
-      case 'Concluído': return 'bg-slate-400';
-      default: return 'bg-slate-400';
-    }
+  get alunosPaginados(): Aluno[] { const inicio = (this.paginaAtual - 1) * this.itensPorPagina; return this.alunosFiltrados.slice(inicio, inicio + this.itensPorPagina); }
+  get totalPaginas(): number { return Math.max(1, Math.ceil(this.alunosFiltrados.length / this.itensPorPagina)); }
+  get paginas(): number[] { return Array.from({ length: this.totalPaginas }, (_, i) => i + 1); }
+  get inicioExibido(): number { return this.alunosFiltrados.length ? (this.paginaAtual - 1) * this.itensPorPagina + 1 : 0; }
+  get fimExibido(): number { return Math.min(this.paginaAtual * this.itensPorPagina, this.alunosFiltrados.length); }
+  get totalPrioritarios(): number { return this.listaAlunos.filter(a => a.prioridade === 'Prioritária').length; }
+  get totalAcompanhamento(): number { return this.listaAlunos.filter(a => a.status === 'Acompanhamento').length; }
+  get totalPendentes(): number { return this.listaAlunos.filter(a => a.status === 'Pendente').length; }
+  get frequenciaMedia(): number { return this.listaAlunos.reduce((s, a) => s + a.frequencia, 0) / Math.max(this.listaAlunos.length, 1); }
+  aplicarFiltros(): void { this.paginaAtual = 1; }
+  limparFiltros(): void { this.busca = this.ano = this.turno = this.atencao = this.status = ''; this.paginaAtual = 1; }
+  irParaPagina(pagina: number): void { if (pagina >= 1 && pagina <= this.totalPaginas) this.paginaAtual = pagina; }
+  exportarRelatorio(): void {
+    const linhas = this.alunosFiltrados.map(a => [a.nome, a.ano, a.turma, a.turno, `${a.frequencia}%`, a.media, a.faltas, a.prioridade, a.status]);
+    const csv = [['Nome', 'Ano', 'Turma', 'Turno', 'Frequência', 'Média', 'Faltas', 'Atenção', 'Status'], ...linhas].map(linha => linha.map(v => `"${String(v).replaceAll('"', '""')}"`).join(';')).join('\n');
+    const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = 'relatorio-estudantes.csv'; link.click(); URL.revokeObjectURL(url);
   }
-
-  getCorFrequencia(frequencia: number): string {
-    if (frequencia < 70) return 'text-red-600';
-    if (frequencia < 80) return 'text-yellow-600';
-    return 'text-[#071e3d]';
-  }
-
-  getBgFrequencia(frequencia: number): string {
-    if (frequencia < 70) return 'bg-red-600';
-    if (frequencia < 80) return 'bg-yellow-500';
-    return 'bg-green-600';
-  }
+  getIniciais(nome: string): string { return nome.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase(); }
+  getCorIniciais(index: number): string { return ['bg-blue-100 text-[#071e3d]', 'bg-green-100 text-green-700', 'bg-slate-200 text-slate-700'][index % 3]; }
+  getBadgeAtencao(n: string): string { return n === 'Prioritária' ? 'bg-red-100 text-red-700' : n === 'Moderada' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'; }
+  getDotStatus(s: string): string { return s === 'Pendente' ? 'bg-yellow-400' : s === 'Acompanhamento' ? 'bg-green-600' : 'bg-slate-400'; }
+  getCorFrequencia(f: number): string { return f < 70 ? 'text-red-600' : f < 80 ? 'text-yellow-600' : 'text-[#071e3d]'; }
+  getBgFrequencia(f: number): string { return f < 70 ? 'bg-red-600' : f < 80 ? 'bg-yellow-500' : 'bg-green-600'; }
 }

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalAcao } from './modal-acao';
+import { ModalAcaoComponent } from './modal-acao';
 
 describe('ModalAcao', () => {
-  let component: ModalAcao;
-  let fixture: ComponentFixture<ModalAcao>;
+  let component: ModalAcaoComponent;
+  let fixture: ComponentFixture<ModalAcaoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalAcao],
+      imports: [ModalAcaoComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ModalAcao);
+    fixture = TestBed.createComponent(ModalAcaoComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

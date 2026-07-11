@@ -1,5 +1,16 @@
 # EduPresente
 
+Painel preventivo para acompanhamento de estudantes em atenção escolar, desenvolvido em Angular com integração opcional ao Supabase.
+
+## Executar
+
+```bash
+npm install
+npm start
+```
+
+Sem credenciais externas, o protótipo usa dados fictícios persistidos no navegador. Para ativar banco e autenticação Supabase, siga [SUPABASE_SETUP.md](SUPABASE_SETUP.md).
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
 
 ## Development server

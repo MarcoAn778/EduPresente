@@ -1,32 +1,45 @@
 <header
-  class="bg-white h-16 border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-10"
+  class="bg-white h-16 border-b border-slate-200 flex items-center justify-between px-3 sm:px-4 md:px-6 shrink-0 z-40"
 >
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-2 sm:gap-4 min-w-0">
     <img
       src="img/EduPresenteLogo_nome.png"
       alt="EduPresente Logo"
-      class="h-8 w-auto object-contain"
+      class="h-7 sm:h-8 w-auto max-w-32 sm:max-w-none object-contain"
     />
 
-    <div class="h-6 w-px bg-slate-300"></div>
-    <span class="text-slate-500 font-medium text-sm">Coordenação Pedagógica</span>
+    <div class="hidden md:block h-6 w-px bg-slate-300"></div>
+    <span class="hidden lg:inline truncate text-slate-500 font-medium text-sm">{{ perfil().nome }}</span>
   </div>
 
-  <div class="flex items-center gap-5 text-slate-500">
-    <button class="hover:text-[#071e3d] transition-colors">
-      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-        />
-      </svg>
-    </button>
+  <div class="flex items-center gap-3 sm:gap-5 text-slate-500 shrink-0">
+    <div class="relative">
+      <button (click)="alternarPainel($event)" [attr.title]="preferencias().mostrarDicas ? 'Abrir notificações' : null" class="relative hover:text-[#071e3d] transition-colors">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+        <span *ngIf="naoLidas" class="absolute -top-2 -right-2 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">{{ naoLidas > 9 ? '9+' : naoLidas }}</span>
+      </button>
+
+      <div *ngIf="painelAberto" (click)="$event.stopPropagation()" class="fixed left-3 right-3 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-10 sm:w-[360px] bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden z-50">
+        <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+          <div><h3 class="font-bold text-[#071e3d] text-sm">Notificações</h3><p class="text-[10px] text-slate-400">{{ naoLidas }} não lida(s)</p></div>
+          <button *ngIf="naoLidas" (click)="marcarTodasComoLidas()" class="text-[10px] font-bold text-[#071e3d] hover:underline">Marcar todas como lidas</button>
+        </div>
+        <div class="max-h-[380px] overflow-y-auto">
+          <button *ngFor="let notificacao of notificacoes" (click)="abrirNotificacao(notificacao)" class="w-full px-4 py-3 flex gap-3 text-left border-b border-slate-100 hover:bg-slate-50 transition-colors" [class.bg-blue-50]="!notificacao.lida">
+            <span class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0" [ngClass]="notificacao.cor"></span>
+            <span class="min-w-0"><span class="block text-sm font-semibold text-[#071e3d]">{{ notificacao.titulo }}</span><span class="block text-xs text-slate-500 mt-0.5">{{ notificacao.descricao }}</span></span>
+            <span *ngIf="!notificacao.lida" class="w-2 h-2 bg-blue-500 rounded-full shrink-0 mt-1.5"></span>
+          </button>
+          <div *ngIf="!notificacoes.length" class="py-10 px-4 text-center"><p class="text-sm font-semibold text-slate-500">Nenhuma notificação ativa.</p><p class="text-xs text-slate-400 mt-1">Ajuste os tipos de alerta nas configurações.</p></div>
+        </div>
+        <a routerLink="/app/configuracoes" (click)="painelAberto = false" class="block px-4 py-3 text-center text-xs font-bold text-[#071e3d] bg-slate-50 hover:underline">Configurar notificações</a>
+      </div>
+    </div>
     
     <button
       routerLink="/app/configuracoes"
       class="cursor-pointer hover:text-[#071e3d] transition-colors"
-      title="Configurações"
+      [attr.title]="preferencias().mostrarDicas ? 'Configurações' : null"
     >
       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path
@@ -42,10 +55,11 @@
       </svg>
     </button>
 
-    <div class="h-6 w-px bg-slate-300 mx-2"></div>
+    <div class="hidden sm:block h-6 w-px bg-slate-300 mx-1 sm:mx-2"></div>
 
-    <div
-      class="w-8 h-8 rounded-full bg-slate-300 overflow-hidden border border-slate-200 cursor-pointer"
+    <div routerLink="/app/configuracoes"
+      [attr.title]="preferencias().mostrarDicas ? 'Perfil e configurações' : null"
+      class="hidden sm:block w-8 h-8 rounded-full bg-slate-300 overflow-hidden border border-slate-200 cursor-pointer"
     >
       <img src="https://i.pravatar.cc/150?img=47" alt="Perfil" class="w-full h-full object-cover" />
     </div>

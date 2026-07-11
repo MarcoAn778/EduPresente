@@ -1,7 +1,6 @@
-<!-- src/app/pages/historico/historico.html -->
 <div class="flex flex-col gap-6 w-full max-w-screen-2xl mx-auto pb-8">
 
-  <!-- ==================== NAVEGAÇÃO SUPERIOR (image_7990e2) ==================== -->
+  <!-- ==================== NAVEGAÇÃO SUPERIOR ==================== -->
   <div class="flex flex-col gap-4 mb-2">
     <div>
       <button (click)="voltar()" class="cursor-pointer flex items-center gap-2 text-sm font-semibold text-[#071e3d] hover:text-[#0a2b5e] hover:-translate-x-1 transition-all duration-300 select-none">
@@ -14,7 +13,7 @@
     <div class="text-sm font-medium select-none flex items-center gap-1.5">
       <a routerLink="/app/alunos" class="text-slate-400 hover:text-[#071e3d] transition-colors">Estudantes</a>
       <span class="text-slate-400">></span>
-      <span class="text-[#071e3d]">Lucas Andrade</span>
+      <span class="text-[#071e3d]">{{ aluno?.nome }}</span>
     </div>
   </div>
 
@@ -23,17 +22,17 @@
     <div>
       <h1 class="text-2xl font-bold text-[#071e3d] select-none">Histórico de Acompanhamento</h1>
       <div class="flex items-center gap-2 mt-1 select-none">
-        <span class="text-sm text-slate-500 font-medium">Lucas Andrade</span>
-        <span class="bg-blue-100 text-[#071e3d] text-[10px] font-bold px-2 py-0.5 rounded-full">2º ano B</span>
+        <span class="text-sm text-slate-500 font-medium">{{ aluno?.nome }}</span>
+        <span class="bg-blue-100 text-[#071e3d] text-[10px] font-bold px-2 py-0.5 rounded-full">{{ aluno?.ano }} {{ aluno?.turma }}</span>
       </div>
     </div>
     
     <div class="flex gap-2 select-none">
-      <button class="bg-[#071e3d] hover:bg-[#0a2b5e] text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-sm">
+      <button (click)="abrirNovaAcao()" class="bg-[#071e3d] hover:bg-[#0a2b5e] text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
         Nova Ação
       </button>
-      <button class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 w-10 flex items-center justify-center rounded-lg transition-colors shadow-sm">
+      <button (click)="alternarOrdem()" title="Alternar ordem" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 w-10 flex items-center justify-center rounded-lg transition-colors shadow-sm">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" /></svg>
       </button>
     </div>
@@ -71,16 +70,16 @@
             </div>
             
             <p class="text-[11px] text-slate-500 mb-4 select-none">
-              {{ acao.responsavel }} &bull; {{ acao.data }}
+              {{ acao.responsavel }} &bull; {{ acao.data | date:'dd/MM/yyyy' }}
             </p>
 
-            <div class="text-sm text-slate-700 leading-relaxed" [ngClass]="getClassesAcao(acao)">
-                <p [ngClass]="{'italic text-slate-600 font-medium': acao.isQuote}">{{ acao.descricao }}</p>
+            <div class="text-sm text-slate-700 leading-relaxed">
+              <p>{{ acao.descricao }}</p>
             </div>
 
             <!-- Tags Opcionais -->
-            <div *ngIf="acao.tags" class="mt-4 flex gap-2 select-none">
-              <span *ngFor="let tag of acao.tags" class="bg-slate-100 border border-slate-200 text-slate-600 text-[10px] font-semibold px-2 py-1 rounded">
+            <div *ngIf="acao.tags as tags" class="mt-4 flex gap-2 select-none">
+              <span *ngFor="let tag of tags" class="bg-slate-100 border border-slate-200 text-slate-600 text-[10px] font-semibold px-2 py-1 rounded">
                 {{ tag }}
               </span>
             </div>
@@ -104,29 +103,29 @@
         
         <div class="flex justify-between items-center text-sm">
           <span class="text-slate-500 select-none">Média trimestral:</span>
-          <span class="font-bold text-[#071e3d]">78.3%</span>
+          <span class="font-bold text-[#071e3d]">{{ mediaTrimestral | number:'1.1-1' }}%</span>
         </div>
         <div class="flex justify-between items-center text-sm mt-1">
           <span class="text-slate-500 select-none">Tendência:</span>
           <span class="font-bold text-green-600 flex items-center gap-1 select-none">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
-            +14%
+            {{ tendencia >= 0 ? '+' : '' }}{{ tendencia }}%
           </span>
         </div>
       </div>
 
-      <!-- Resumo do Período -->
+      
       <div class="bg-[#071e3d] rounded-xl shadow-sm p-6 text-white relative overflow-hidden">
-        <!-- Detalhe visual de fundo -->
+        
         <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-white opacity-5 rounded-full blur-2xl"></div>
         
         <h3 class="font-bold mb-3 select-none">Resumo do Período</h3>
         <p class="text-xs text-slate-300 leading-relaxed mb-6">
-          O aluno apresenta melhora gradual na frequência após o início do reforço escolar. O foco atual deve ser o acolhimento emocional para reverter a desmotivação citada.
+          {{ resumoPeriodo.texto }}
         </p>
-        <div class="flex items-center gap-2 text-xs font-semibold text-blue-200 select-none">
+        <div class="flex items-center gap-2 text-xs font-semibold select-none" [ngClass]="resumoPeriodo.classeDestaque">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>
-          Plano de Retenção Ativo
+          {{ resumoPeriodo.destaque }}
         </div>
       </div>
 
@@ -134,12 +133,12 @@
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-4 select-none">Arquivos Anexos</h3>
         <div class="grid grid-cols-2 gap-3">
-          <!-- Card Arquivo 1 -->
+          
           <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-100 transition-colors select-none">
             <svg class="w-6 h-6 text-slate-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
             <p class="text-[10px] text-slate-600 font-medium">Relatório_Abril.pdf</p>
           </div>
-          <!-- Card Arquivo 2 -->
+          
           <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-100 transition-colors select-none">
             <svg class="w-6 h-6 text-slate-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
             <p class="text-[10px] text-slate-600 font-medium">Notas_Reforco.doc</p>
@@ -150,3 +149,5 @@
     </div>
   </div>
 </div>
+
+<app-modal-acao [alunoId]="aluno?.id || ''" [nomeAluno]="aluno?.nome || ''" (acaoSalva)="carregarAcoes()"></app-modal-acao>

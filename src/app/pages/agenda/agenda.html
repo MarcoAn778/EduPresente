@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-6 w-full max-w-screen-2xl mx-auto pb-8">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <p class="text-[11px] font-bold text-[#071e3d] uppercase tracking-wider mb-1">Acompanhamento escolar</p>
+      <h1 class="text-3xl font-bold text-[#071e3d]">Agenda de Acompanhamentos</h1>
+      <p class="text-sm text-slate-500 mt-1">Gerencie visitas, reuniões e rotinas pedagógicas.</p>
+    </div>
+    <button (click)="abrirModal()" class="bg-[#071e3d] hover:bg-[#0a2b5e] text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+      Adicionar compromisso
+    </button>
+  </div>
+
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-bold text-slate-500 mr-1">Filtros:</span>
+      <button (click)="filtroTipo = ''" [ngClass]="!filtroTipo ? 'border-[#071e3d] text-[#071e3d] bg-slate-50' : 'border-slate-200 text-slate-500'" class="px-3 py-1.5 rounded-full border text-xs font-semibold">Todos os tipos</button>
+      <button *ngFor="let tipo of tipos.slice(0, 4)" (click)="filtroTipo = tipo.valor" [ngClass]="filtroTipo === tipo.valor ? 'border-[#071e3d] text-[#071e3d] bg-slate-50' : 'border-slate-200 text-slate-500'" class="px-3 py-1.5 rounded-full border text-xs font-semibold flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full" [ngClass]="corTipo(tipo.valor)"></span>{{ tipo.label }}
+      </button>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-xs font-bold text-slate-500">Prioridade:</label>
+      <select [(ngModel)]="filtroPrioridade" class="px-3 py-2 border border-slate-200 rounded-lg text-xs text-slate-600 bg-white"><option value="">Todas</option><option value="Normal">Normal</option><option value="Alta">Alta</option></select>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <section class="xl:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+        <h2 class="text-lg font-bold text-[#071e3d]">{{ tituloMes }}</h2>
+        <div class="flex items-center gap-2">
+          <button (click)="mesAnterior()" title="Mês anterior" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center">‹</button>
+          <button (click)="irParaHoje()" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50">Hoje</button>
+          <button (click)="proximoMes()" title="Próximo mês" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center">›</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-7 border-b border-slate-100">
+        <div *ngFor="let dia of diasSemana" class="py-3 text-center text-[10px] font-bold text-slate-400">{{ dia }}</div>
+      </div>
+      <div class="grid grid-cols-7 auto-rows-[88px] md:auto-rows-[105px]">
+        <button *ngFor="let dia of diasCalendario" (click)="selecionarDia(dia)" (dblclick)="abrirModal(dia.iso)" [ngClass]="dataSelecionada === dia.iso ? 'ring-2 ring-inset ring-[#071e3d] bg-blue-50/40' : 'hover:bg-slate-50'" class="relative border-r border-b border-slate-100 p-2 text-left transition-colors overflow-hidden">
+          <span [ngClass]="dia.hoje ? 'bg-[#071e3d] text-white' : dia.mesAtual ? 'text-slate-700' : 'text-slate-300'" class="inline-flex w-7 h-7 rounded-full items-center justify-center text-xs font-bold">{{ dia.numero }}</span>
+          <div class="flex gap-1 mt-2 flex-wrap">
+            <span *ngFor="let compromisso of dia.compromissos.slice(0, 4)" [title]="compromisso.titulo" class="w-2 h-2 rounded-full" [ngClass]="corTipo(compromisso.tipo)"></span>
+          </div>
+          <span *ngIf="dia.compromissos.length > 4" class="text-[9px] text-slate-400">+{{ dia.compromissos.length - 4 }}</span>
+        </button>
+      </div>
+    </section>
+
+    <aside class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 min-h-[520px]">
+      <div class="mb-5">
+        <p class="text-xs font-bold text-slate-400 uppercase">Compromissos de</p>
+        <h2 class="text-xl font-bold text-[#071e3d] mt-1">{{ formatarDataSelecionada() }}</h2>
+      </div>
+      <div class="flex flex-col gap-3">
+        <article *ngFor="let compromisso of compromissosDoDia" class="border border-slate-100 border-l-4 rounded-lg p-4 shadow-sm" [ngClass]="bordaTipo(compromisso.tipo)">
+          <div class="flex justify-between items-start gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 mb-1"><span class="text-xs font-bold text-slate-600">{{ compromisso.hora }}</span><span class="text-[9px] font-bold uppercase text-slate-400">{{ labelTipo(compromisso.tipo) }}</span><span *ngIf="compromisso.prioridade === 'Alta'" class="text-[9px] font-bold text-red-600 uppercase">Prioridade</span></div>
+              <h3 class="text-sm font-bold text-[#071e3d]">{{ compromisso.titulo }}</h3>
+              <p class="text-xs text-slate-500 mt-1">{{ compromisso.responsavel }}</p>
+              <p *ngIf="nomeAluno(compromisso.alunoId)" class="text-[10px] text-slate-400 mt-1">Estudante: {{ nomeAluno(compromisso.alunoId) }}</p>
+            </div>
+            <button (click)="remover(compromisso)" title="Remover compromisso" class="text-slate-300 hover:text-red-500">×</button>
+          </div>
+        </article>
+        <div *ngIf="!compromissosDoDia.length" class="py-12 text-center text-slate-400"><p class="text-sm font-semibold">Nenhum compromisso neste dia.</p><button (click)="abrirModal()" class="text-xs text-[#071e3d] font-bold mt-2 hover:underline">Adicionar compromisso</button></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<dialog #modalCompromisso class="fixed inset-0 m-auto rounded-2xl p-0 w-full max-w-xl max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-2rem)] overflow-y-auto backdrop:bg-black/50 shadow-2xl">
+  <div class="p-4 sm:p-6">
+    <div class="flex justify-between items-start mb-6"><div><h2 class="text-lg font-bold text-[#071e3d]">Adicionar compromisso</h2><p class="text-xs text-slate-500 mt-1">Inclua uma reunião, visita ou rotina pedagógica.</p></div><button (click)="fecharModal()" class="text-slate-400 hover:text-slate-700">×</button></div>
+    <div class="space-y-4">
+      <div><label class="text-xs font-bold text-slate-500 uppercase">Título</label><input [(ngModel)]="formulario.titulo" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1" placeholder="Ex.: Reunião com responsável"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="text-xs font-bold text-slate-500 uppercase">Tipo</label><select [(ngModel)]="formulario.tipo" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1"><option *ngFor="let tipo of tipos" [value]="tipo.valor">{{ tipo.label }}</option></select></div>
+        <div><label class="text-xs font-bold text-slate-500 uppercase">Prioridade</label><select [(ngModel)]="formulario.prioridade" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1"><option value="Normal">Normal</option><option value="Alta">Alta</option></select></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="text-xs font-bold text-slate-500 uppercase">Data</label><input [(ngModel)]="formulario.data" type="date" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1"></div><div><label class="text-xs font-bold text-slate-500 uppercase">Horário</label><input [(ngModel)]="formulario.hora" type="time" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1"></div></div>
+      <div><label class="text-xs font-bold text-slate-500 uppercase">Responsável</label><input [(ngModel)]="formulario.responsavel" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1" placeholder="Nome do profissional"></div>
+      <div><label class="text-xs font-bold text-slate-500 uppercase">Estudante relacionado (opcional)</label><select [(ngModel)]="formulario.alunoId" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1"><option [ngValue]="undefined">Nenhum estudante específico</option><option *ngFor="let aluno of alunos" [value]="aluno.id">{{ aluno.nome }}</option></select></div>
+      <div><label class="text-xs font-bold text-slate-500 uppercase">Descrição</label><textarea [(ngModel)]="formulario.descricao" class="w-full p-2.5 border border-slate-300 rounded-lg mt-1 h-20" placeholder="Detalhes do compromisso..."></textarea></div>
+      <p *ngIf="erro" class="text-sm text-red-600">{{ erro }}</p>
+    </div>
+    <div class="flex flex-col-reverse sm:flex-row gap-3 mt-6"><button (click)="fecharModal()" class="flex-1 py-2.5 border border-slate-300 rounded-lg font-semibold hover:bg-slate-50">Cancelar</button><button (click)="salvar()" [disabled]="salvando" class="flex-1 py-2.5 bg-[#071e3d] text-white rounded-lg font-semibold hover:bg-[#0a2b5e]">{{ salvando ? 'Salvando...' : 'Salvar compromisso' }}</button></div>
+  </div>
+</dialog>

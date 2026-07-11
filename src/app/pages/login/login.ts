@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
+import { PreferenciasService } from '../../services/preferencias';
 
 @Component({
   selector: 'app-login',
@@ -15,16 +16,20 @@ export class Login {
   loginForm: FormGroup;
   erroLogin = false;
   mostrarSenha = false; 
+  processando = false;
+  readonly exigirTermos: boolean;
 
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private preferenciasService = inject(PreferenciasService);
 
   constructor() {
+    this.exigirTermos = this.preferenciasService.preferencias().exigirTermos;
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       senha: ['', Validators.required],
-      termos: [false, Validators.requiredTrue] 
+      termos: [!this.exigirTermos, this.exigirTermos ? Validators.requiredTrue : []]
     });
   }
 
@@ -32,16 +37,19 @@ export class Login {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
+      this.processando = true;
+      this.erroLogin = false;
       const { email, senha } = this.loginForm.value;
-      const sucesso = this.authService.login(email, senha);
+      const sucesso = await this.authService.login(email, senha);
 
       if (sucesso) {
-        this.router.navigate(['/app/dashboard']);
+        await this.router.navigate(['/app/dashboard']);
       } else {
         this.erroLogin = true;
       }
+      this.processando = false;
     }
   }
 }

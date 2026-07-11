@@ -14,13 +14,21 @@
         <span class="p-1.5 bg-blue-100 text-[#071e3d] rounded-lg"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg></span>
         Perfil da equipe escolar
       </h2>
-      <div class="grid grid-cols-2 gap-y-4 text-sm">
-        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Nome</p><p class="font-semibold text-[#071e3d]">Coordenação Pedagógica</p></div>
-        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">E-mail</p><p class="font-semibold text-[#071e3d]">coordenador@escola.com</p></div>
-        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Escola</p><p class="font-semibold text-[#071e3d]">Escola Estadual Esperança</p></div>
-        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Cargo</p><p class="font-semibold text-[#071e3d]">Coordenação Pedagógica</p></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-3 text-sm">
+        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Nome</p><p class="font-semibold text-[#071e3d]">{{ perfil.nome }}</p></div>
+        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">E-mail</p><p class="font-semibold text-[#071e3d]">{{ perfil.email }}</p></div>
+        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Escola</p><p class="font-semibold text-[#071e3d]">{{ perfil.escola }}</p></div>
+        <div><p class="text-[10px] uppercase font-bold text-slate-400 select-none">Cargo</p><p class="font-semibold text-[#071e3d]">{{ perfil.cargo }}</p></div>
       </div>
-      <button class="mt-6 w-full py-2 border border-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors select-none">Editar perfil</button>
+      <div *ngIf="editandoPerfil" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+        <input [(ngModel)]="perfil.nome" class="p-2 border border-slate-300 rounded-lg text-sm" placeholder="Nome">
+        <input [(ngModel)]="perfil.email" type="email" class="p-2 border border-slate-300 rounded-lg text-sm" placeholder="E-mail">
+        <input [(ngModel)]="perfil.escola" class="p-2 border border-slate-300 rounded-lg text-sm" placeholder="Escola">
+        <input [(ngModel)]="perfil.cargo" class="p-2 border border-slate-300 rounded-lg text-sm" placeholder="Cargo">
+        <button (click)="cancelarPerfil()" class="py-2 border border-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-50">Cancelar</button>
+        <button (click)="salvarPerfil()" class="py-2 bg-[#071e3d] text-white rounded-lg text-sm font-semibold">Salvar perfil</button>
+      </div>
+      <button *ngIf="!editandoPerfil" (click)="editarPerfil()" class="mt-6 w-full py-2 border border-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors select-none">Editar perfil</button>
     </div>
 
     <!-- CARD 2: INTERFACE -->
@@ -30,10 +38,10 @@
         Preferências da interface
       </h2>
       <div class="space-y-6">
-        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Tema Escuro</span><input type="checkbox" class="toggle"></div>
-        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Tamanho da fonte Grande</span><input type="checkbox" class="toggle"></div>
-        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Reduzir animações</span><input type="checkbox" class="toggle"></div>
-        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Mostrar dicas de uso</span><input type="checkbox" checked class="toggle"></div>
+        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Tema Escuro</span><input [(ngModel)]="opcoes.temaEscuro" (ngModelChange)="salvarPreferencias()" type="checkbox" class="toggle"></div>
+        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Tamanho da fonte Grande</span><input [(ngModel)]="opcoes.fonteGrande" (ngModelChange)="salvarPreferencias()" type="checkbox" class="toggle"></div>
+        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Reduzir animações</span><input [(ngModel)]="opcoes.reduzirAnimacoes" (ngModelChange)="salvarPreferencias()" type="checkbox" class="toggle"></div>
+        <div class="flex justify-between items-center"><span class="text-sm text-slate-600">Mostrar dicas de uso</span><input [(ngModel)]="opcoes.mostrarDicas" (ngModelChange)="salvarPreferencias()" type="checkbox" class="toggle"></div>
       </div>
     </div>
 
@@ -44,12 +52,12 @@
         Notificações de acompanhamento
       </h2>
       <div class="space-y-4 mb-6">
-        <label class="flex items-center gap-3 text-sm text-slate-600"><input type="checkbox" checked class="w-4 h-4"> Estudantes em atenção prioritária</label>
-        <label class="flex items-center gap-3 text-sm text-slate-600"><input type="checkbox" checked class="w-4 h-4"> Ações pedagógicas pendentes</label>
-        <label class="flex items-center gap-3 text-sm text-slate-600"><input type="checkbox" class="w-4 h-4"> Baixa frequência continuada</label>
+        <label class="flex items-center gap-3 text-sm text-slate-600"><input [(ngModel)]="opcoes.alertaPrioridade" (ngModelChange)="salvarPreferencias()" type="checkbox" class="w-4 h-4"> Estudantes em atenção prioritária</label>
+        <label class="flex items-center gap-3 text-sm text-slate-600"><input [(ngModel)]="opcoes.acoesPendentes" (ngModelChange)="salvarPreferencias()" type="checkbox" class="w-4 h-4"> Ações pedagógicas pendentes</label>
+        <label class="flex items-center gap-3 text-sm text-slate-600"><input [(ngModel)]="opcoes.baixaFrequencia" (ngModelChange)="salvarPreferencias()" type="checkbox" class="w-4 h-4"> Baixa frequência continuada</label>
       </div>
       <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2">Frequência dos resumos por e-mail</label>
-      <select class="w-full p-2 border border-slate-300 rounded-lg text-sm"><option>Semanalmente (Sexta-feira)</option></select>
+      <select [(ngModel)]="opcoes.frequenciaResumo" (ngModelChange)="salvarPreferencias()" class="w-full p-2 border border-slate-300 rounded-lg text-sm"><option>Semanalmente (Sexta-feira)</option><option>Quinzenalmente</option><option>Mensalmente</option></select>
     </div>
 
     <!-- CARD 4: PRIVACIDADE -->
@@ -59,13 +67,19 @@
         Privacidade e segurança
       </h2>
       <div class="bg-slate-50 p-4 rounded-lg text-xs text-slate-600 mb-4 border border-slate-100">
-        Esta aplicação opera em um ambiente seguro de simulação. <strong>Os dados apresentados são fictícios</strong> e gerados exclusivamente para fins de demonstração acadêmica da disciplina de PDS.
+        Esta aplicação opera em um ambiente seguro de simulação. <strong>Os dados apresentados são fictícios</strong> e gerados exclusivamente para fins de demonstração.
       </div>
-      <label class="flex items-center gap-3 text-sm text-slate-600 mb-6"><input type="checkbox" checked class="w-4 h-4"> Exigir aceite dos termos de uso no login</label>
-      <div class="flex gap-3">
-        <button class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Ver orientações de LGPD</button>
-        <button class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Alterar senha</button>
+      <label class="flex items-center gap-3 text-sm text-slate-600 mb-6"><input [(ngModel)]="opcoes.exigirTermos" (ngModelChange)="salvarPreferencias()" type="checkbox" class="w-4 h-4"> Exigir aceite dos termos de uso no login</label>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button (click)="verLgpd()" class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Ver orientações de LGPD</button>
+        <button (click)="alterarSenha()" class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Alterar senha</button>
       </div>
+      <div *ngIf="alterandoSenha" class="mt-4 space-y-3">
+        <input [(ngModel)]="novaSenha" type="password" class="w-full p-2 border border-slate-300 rounded-lg text-sm" placeholder="Nova senha">
+        <input [(ngModel)]="confirmarSenha" type="password" class="w-full p-2 border border-slate-300 rounded-lg text-sm" placeholder="Confirmar nova senha">
+        <button (click)="salvarSenha()" class="w-full py-2 bg-[#071e3d] text-white rounded-lg text-sm font-semibold">Salvar nova senha</button>
+      </div>
+      <p *ngIf="mensagemSenha" class="text-xs mt-3" [ngClass]="mensagemSenha.includes('sucesso') ? 'text-green-600' : 'text-red-600'">{{ mensagemSenha }}</p>
     </div>
   </div>
 
@@ -75,12 +89,12 @@
       <span class="p-1.5 bg-slate-100 text-slate-600 rounded-lg"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg></span>
       Gestão de Dados (Mock)
     </h2>
-    <p class="text-xs text-slate-500 mb-6">Ferramentas administrativas para resetar o estado da aplicação durante a avaliação acadêmica.</p>
-    <div class="flex gap-4">
-      <button class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-200 transition-colors">Restaurar dados simulados (Reset)</button>
-      <button class="flex-1 bg-[#071e3d] text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0a2b5e] transition-colors">Exportar relatório demonstrativo</button>
+    <p class="text-xs text-slate-500 mb-6">Ferramentas administrativas para resetar o estado da aplicação.</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <button (click)="restaurar()" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-200 transition-colors">Restaurar dados simulados (Reset)</button>
+      <button (click)="exportar()" class="flex-1 bg-[#071e3d] text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0a2b5e] transition-colors">Exportar relatório demonstrativo</button>
     </div>
   </div>
 
-  <p class="text-center text-[10px] text-slate-400 mt-8 select-none">EduPresente - Projeto de Disciplina de Software v1.0.0</p>
+  <p class="text-center text-[10px] text-slate-400 mt-8 select-none">EduPresente - v1.0.0</p>
 </div>
