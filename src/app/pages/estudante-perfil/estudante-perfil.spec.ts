@@ -28,4 +28,11 @@ describe('EstudantePerfil', () => {
     expect(component.acoesRecentes.length).toBeGreaterThan(0);
     expect(fixture.nativeElement.textContent).toContain(component.acoesRecentes[0].titulo);
   });
+
+  it('deve calcular a variação usando os dois últimos períodos do aluno', () => {
+    fixture.detectChanges();
+
+    expect(component.variacaoMedia).toBe(-0.6);
+    expect(fixture.nativeElement.textContent).toContain('-0.6 vs período anterior');
+  });
 });

@@ -145,14 +145,15 @@
 
         <div
           *ngIf="erroLogin"
-          class="text-red-500 text-sm text-center mb-4 bg-red-50 p-2 rounded border border-red-100"
+          role="alert"
+          aria-live="polite"
+          class="text-red-600 text-sm text-center mb-4 bg-red-50 p-3 rounded-lg border border-red-200"
         >
-          Credenciais inválidas. O acesso padrão é coordenador&#64;escolapromove.com / 123456.
+          {{ mensagemErro }}
         </div>
 
         <button
-          type="button"
-          (click)="onSubmit()"
+          type="submit"
           [disabled]="loginForm.invalid || processando"
           class="w-full bg-[#071e3d] hover:bg-[#0a2b5e] disabled:bg-slate-400 text-white font-semibold py-3.5 rounded-lg flex justify-center items-center gap-2 transition-all cursor-pointer disabled:cursor-not-allowed"
         >

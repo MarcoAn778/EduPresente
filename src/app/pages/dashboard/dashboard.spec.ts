@@ -34,4 +34,17 @@ describe('Dashboard', () => {
     expect(component.compromissosSemana.length).toBeGreaterThan(0);
     expect(fixture.nativeElement.textContent).toContain(component.compromissosSemana[0].titulo);
   });
+
+  it('deve criar links dos cards de atenção com o filtro correspondente', () => {
+    fixture.detectChanges();
+
+    const linkLeve: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      'a[href*="atencao=Leve"]',
+    );
+    const cardTotal: HTMLAnchorElement | null = fixture.nativeElement.querySelector(
+      '[data-testid="card-total-monitorado"]',
+    );
+    expect(linkLeve).toBeTruthy();
+    expect(cardTotal?.textContent).not.toContain('4%');
+  });
 });

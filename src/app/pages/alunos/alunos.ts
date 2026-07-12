@@ -1,20 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Aluno } from '../../models/edupresente.models';
 import { DadosService } from '../../services/dados';
 
 @Component({ selector: 'app-alunos', standalone: true, imports: [CommonModule, FormsModule, RouterModule], templateUrl: './alunos.html' })
 export class Alunos implements OnInit {
   private readonly dados = inject(DadosService);
+  private readonly route = inject(ActivatedRoute);
   listaAlunos: Aluno[] = [];
   carregando = true;
   busca = ''; ano = ''; turno = ''; atencao = ''; status = '';
   paginaAtual = 1;
   readonly itensPorPagina = 5;
 
-  ngOnInit(): void { this.listaAlunos = this.dados.listarAlunos(); this.carregando = false; }
+  ngOnInit(): void {
+    const atencao = this.route.snapshot.queryParamMap.get('atencao');
+    if (atencao === 'Leve' || atencao === 'Moderada' || atencao === 'Prioritária') this.atencao = atencao;
+    this.listaAlunos = this.dados.listarAlunos();
+    this.carregando = false;
+  }
   get alunosFiltrados(): Aluno[] {
     const termo = this.busca.trim().toLocaleLowerCase('pt-BR');
     return this.listaAlunos.filter(a => (!termo || a.nome.toLocaleLowerCase('pt-BR').includes(termo) || a.cpfMascarado.includes(termo)) && (!this.ano || a.ano === this.ano) && (!this.turno || a.turno === this.turno) && (!this.atencao || a.prioridade === this.atencao) && (!this.status || a.status === this.status));

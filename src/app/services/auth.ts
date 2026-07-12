@@ -3,6 +3,7 @@ import { SupabaseService } from './supabase';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly tempoLimiteLoginMs = 10000;
   private readonly chaveSessao = 'edupresente_auth';
   private readonly usuarioPadrao = 'coordenador@escola.com';
   private readonly senhaPadrao = '123456';
@@ -12,11 +13,26 @@ export class AuthService {
   async login(email: string, senha: string): Promise<boolean> {
     const client = this.supabase.client;
     if (client) {
-      const { data, error } = await client.auth.signInWithPassword({ email: email.trim(), password: senha });
-      if (error || !data.session) return false;
-      this.autenticado = true;
-      this.marcarSessao(true);
-      return true;
+      let timeoutId: ReturnType<typeof setTimeout> | undefined;
+      try {
+        const limite = new Promise<never>((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error('Tempo limite do login excedido')), this.tempoLimiteLoginMs);
+        });
+        const autenticacao = Promise.resolve().then(() =>
+          client.auth.signInWithPassword({ email: email.trim(), password: senha })
+        );
+        const { data, error } = await Promise.race([limite, autenticacao]);
+        const autenticado = !error && Boolean(data.session);
+        this.autenticado = autenticado;
+        this.marcarSessao(autenticado);
+        return autenticado;
+      } catch (erro) {
+        this.autenticado = false;
+        this.marcarSessao(false);
+        throw erro;
+      } finally {
+        if (timeoutId) clearTimeout(timeoutId);
+      }
     }
 
     const autenticado = email.trim() === this.usuarioPadrao && senha === this.senhaPadrao;

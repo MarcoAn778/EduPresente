@@ -42,6 +42,16 @@ export class EstudantePerfil implements OnInit {
   abrirNovaAcao(): void { this.modalAcao?.abrir(); }
   carregarAcoes(): void { if (this.aluno) this.acoesRecentes = this.dados.listarAcoes(this.aluno.id).slice(0, 5); }
   mediaBimestre(indice: number): number | undefined { return this.aluno?.mediasBimestrais[indice]; }
+  get variacaoMedia(): number | null {
+    const medias = this.aluno?.mediasBimestrais.filter(Number.isFinite) ?? [];
+    if (medias.length < 2) return null;
+    const variacao = Number((medias.at(-1)! - medias.at(-2)!).toFixed(1));
+    return Object.is(variacao, -0) ? 0 : variacao;
+  }
+  get classeVariacaoMedia(): string {
+    if (this.variacaoMedia === null || this.variacaoMedia === 0) return 'text-slate-500';
+    return this.variacaoMedia > 0 ? 'text-green-600' : 'text-red-600';
+  }
   getBadgeStatusAcao(status: string): string { return status === 'Pendente' ? 'bg-red-100 text-red-700' : status === 'Concluída' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-[#071e3d]'; }
   badgeAtencao(): string { return this.aluno?.prioridade === 'Prioritária' ? 'bg-red-100 text-red-700' : this.aluno?.prioridade === 'Moderada' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'; }
   private definirAluno(aluno: Aluno): void {
