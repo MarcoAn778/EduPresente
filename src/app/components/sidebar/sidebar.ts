@@ -26,6 +26,17 @@ export class SidebarComponent {
     this.modalAcao?.abrir();
   }
 
+  paginaMobileAtiva(item: 'inicio' | 'alunos' | 'agenda' | 'lgpd'): boolean {
+    const caminho = this.router.url.split('?')[0];
+    const rotas: Record<typeof item, string[]> = {
+      inicio: ['/app/dashboard'],
+      alunos: ['/app/alunos', '/app/perfil', '/app/historico'],
+      agenda: ['/app/agenda'],
+      lgpd: ['/app/lgpd']
+    };
+    return rotas[item].some(rota => caminho === rota || caminho.startsWith(`${rota}/`));
+  }
+
   async sair(): Promise<void> {
     await this.authService.logout();
     await this.router.navigate(['/login']);
