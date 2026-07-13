@@ -9,8 +9,11 @@ export class AuthService {
   private readonly senhaPadrao = '123456';
   private readonly supabase = inject(SupabaseService);
   private autenticado?: boolean;
+  private manterConectado = false;
 
-  async login(email: string, senha: string): Promise<boolean> {
+  async login(email: string, senha: string, manterConectado = false): Promise<boolean> {
+    this.manterConectado = manterConectado;
+    this.supabase.configurarPersistencia(manterConectado);
     const client = this.supabase.client;
     if (client) {
       let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -24,11 +27,9 @@ export class AuthService {
         const { data, error } = await Promise.race([limite, autenticacao]);
         const autenticado = !error && Boolean(data.session);
         this.autenticado = autenticado;
-        this.marcarSessao(autenticado);
         return autenticado;
       } catch (erro) {
         this.autenticado = false;
-        this.marcarSessao(false);
         throw erro;
       } finally {
         if (timeoutId) clearTimeout(timeoutId);
@@ -37,7 +38,7 @@ export class AuthService {
 
     const autenticado = email.trim() === this.usuarioPadrao && senha === this.senhaPadrao;
     this.autenticado = autenticado;
-    this.marcarSessao(autenticado);
+    this.marcarSessao(autenticado, manterConectado);
     return autenticado;
   }
 
@@ -48,16 +49,16 @@ export class AuthService {
       const { data } = await client.auth.getSession();
       const autenticado = Boolean(data.session);
       this.autenticado = autenticado;
-      this.marcarSessao(autenticado);
       return autenticado;
     }
-    this.autenticado = typeof localStorage !== 'undefined' && localStorage.getItem(this.chaveSessao) === 'true';
+    this.autenticado = typeof localStorage !== 'undefined' &&
+      (localStorage.getItem(this.chaveSessao) === 'true' || sessionStorage.getItem(this.chaveSessao) === 'true');
     return this.autenticado;
   }
 
   async logout(): Promise<void> {
     await this.supabase.client?.auth.signOut();
-    this.marcarSessao(false);
+    this.marcarSessao(false, false);
     this.autenticado = false;
   }
 
@@ -69,9 +70,10 @@ export class AuthService {
     return !error;
   }
 
-  private marcarSessao(ativa: boolean): void {
+  private marcarSessao(ativa: boolean, persistir: boolean): void {
     if (typeof localStorage === 'undefined') return;
-    if (ativa) localStorage.setItem(this.chaveSessao, 'true');
-    else localStorage.removeItem(this.chaveSessao);
+    localStorage.removeItem(this.chaveSessao);
+    sessionStorage.removeItem(this.chaveSessao);
+    if (ativa) (persistir ? localStorage : sessionStorage).setItem(this.chaveSessao, 'true');
   }
 }

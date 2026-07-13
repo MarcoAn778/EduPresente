@@ -31,6 +31,7 @@ export class Login {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       senha: ['', Validators.required],
+      manterConectado: [false],
       termos: [!this.exigirTermos, this.exigirTermos ? Validators.requiredTrue : []]
     });
   }
@@ -48,10 +49,10 @@ export class Login {
     this.processando = true;
     this.erroLogin = false;
     this.mensagemErro = '';
-    const { email, senha } = this.loginForm.value;
+    const { email, senha, manterConectado } = this.loginForm.value;
 
     try {
-      const sucesso = await this.authService.login(email, senha);
+      const sucesso = await this.authService.login(email, senha, Boolean(manterConectado));
       if (sucesso) {
         await this.router.navigate(['/app/dashboard']);
       } else {

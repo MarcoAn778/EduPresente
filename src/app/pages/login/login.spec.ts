@@ -65,4 +65,15 @@ describe('Login', () => {
     expect(component.erroLogin).toBe(true);
     expect(component.mensagemErro).toContain('Verifique sua conexão');
   });
+
+  it('deve enviar a escolha de manter conectado para a autenticação', async () => {
+    authServiceMock.login.mockResolvedValue(false);
+    component.loginForm.patchValue({
+      email: 'teste@escola.com', senha: '123456', manterConectado: true, termos: true,
+    });
+
+    await component.onSubmit();
+
+    expect(authServiceMock.login).toHaveBeenCalledWith('teste@escola.com', '123456', true);
+  });
 });
