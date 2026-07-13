@@ -41,7 +41,7 @@ export class Configuracoes implements OnInit {
     if (sucesso) { this.novaSenha = this.confirmarSenha = ''; this.alterandoSenha = false; }
   }
   restaurar(): void {
-    if (window.confirm('Restaurar os dados e preferências originais?')) {
+    if (window.confirm('Esta ação restaurará os dados e preferências padrão. Deseja continuar?')) {
       this.dados.restaurarDadosSimulados();
       this.preferenciasService.restaurar();
       window.location.reload();
@@ -50,6 +50,6 @@ export class Configuracoes implements OnInit {
   exportar(): void {
     const relatorio = { estudantes: this.dados.listarAlunos(), acoes: this.dados.listarAcoes(), compromissos: this.dados.listarCompromissos(), preferencias: this.opcoes };
     const url = URL.createObjectURL(new Blob([JSON.stringify(relatorio, null, 2)], { type: 'application/json' }));
-    const link = document.createElement('a'); link.href = url; link.download = 'edupresente-relatorio-demonstrativo.json'; link.click(); URL.revokeObjectURL(url);
+    const link = document.createElement('a'); link.href = url; link.download = 'edupresente-exportacao-dados.json'; link.click(); URL.revokeObjectURL(url);
   }
 }

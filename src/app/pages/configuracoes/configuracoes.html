@@ -67,11 +67,11 @@
         Privacidade e segurança
       </h2>
       <div class="bg-slate-50 p-4 rounded-lg text-xs text-slate-600 mb-4 border border-slate-100">
-        Esta aplicação opera em um ambiente seguro de simulação. <strong>Os dados apresentados são fictícios</strong> e gerados exclusivamente para fins de demonstração.
+        O acesso às informações é protegido por autenticação e políticas de autorização. Utilize os dados exclusivamente para acompanhamento educacional, preservando confidencialidade, necessidade e responsabilidade no tratamento.
       </div>
       <label class="flex items-center gap-3 text-sm text-slate-600 mb-6"><input [(ngModel)]="opcoes.exigirTermos" (ngModelChange)="salvarPreferencias()" type="checkbox" class="w-4 h-4"> Exigir aceite dos termos de uso no login</label>
       <div class="flex flex-col sm:flex-row gap-3">
-        <button (click)="verLgpd()" class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Ver orientações de LGPD</button>
+        <button (click)="verLgpd()" class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Consultar política de privacidade</button>
         <button (click)="alterarSenha()" class="flex-1 py-2 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50">Alterar senha</button>
       </div>
       <div *ngIf="alterandoSenha" class="mt-4 space-y-3">
@@ -87,12 +87,12 @@
   <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6">
     <h2 class="font-bold text-[#071e3d] mb-2 flex items-center gap-2 select-none">
       <span class="p-1.5 bg-slate-100 text-slate-600 rounded-lg"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg></span>
-      Gestão de Dados (Mock)
+      Gestão e portabilidade de dados
     </h2>
-    <p class="text-xs text-slate-500 mb-6">Ferramentas administrativas para resetar o estado da aplicação.</p>
+    <p class="text-xs text-slate-500 mb-6">Ferramentas administrativas para exportação e restauração dos dados do ambiente.</p>
     <div class="flex flex-col sm:flex-row gap-4">
-      <button (click)="restaurar()" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-200 transition-colors">Restaurar dados simulados (Reset)</button>
-      <button (click)="exportar()" class="flex-1 bg-[#071e3d] text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0a2b5e] transition-colors">Exportar relatório demonstrativo</button>
+      <button (click)="restaurar()" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg text-sm font-semibold hover:bg-red-200 transition-colors">Restaurar dados padrão</button>
+      <button (click)="exportar()" class="flex-1 bg-[#071e3d] text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-[#0a2b5e] transition-colors">Exportar dados da aplicação</button>
     </div>
   </div>
 

@@ -19,4 +19,14 @@ describe('Configuracoes', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve usar linguagem profissional na gestão de privacidade e dados', () => {
+    fixture.detectChanges();
+    const texto = fixture.nativeElement.textContent as string;
+
+    expect(texto).toContain('Gestão e portabilidade de dados');
+    expect(texto).toContain('Consultar política de privacidade');
+    expect(texto).not.toContain('Mock');
+    expect(texto).not.toContain('dados simulados');
+  });
 });

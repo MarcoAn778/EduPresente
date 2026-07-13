@@ -19,4 +19,14 @@ describe('Lgpd', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('deve apresentar uma política de privacidade com linguagem institucional', () => {
+    fixture.detectChanges();
+    const texto = fixture.nativeElement.textContent as string;
+
+    expect(texto).toContain('Governança de Dados');
+    expect(texto).toContain('Minimização e qualidade dos dados');
+    expect(texto).not.toContain('protótipo acadêmico');
+    expect(texto).not.toContain('Dados simulados');
+  });
 });
