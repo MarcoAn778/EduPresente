@@ -47,4 +47,17 @@ describe('Dashboard', () => {
     expect(linkLeve).toBeTruthy();
     expect(cardTotal?.textContent).not.toContain('4%');
   });
+
+  it('deve renderizar e navegar entre as três imagens do carrossel', () => {
+    fixture.detectChanges();
+
+    expect(component.slidesCarrossel.length).toBe(3);
+    expect(fixture.nativeElement.querySelectorAll('section[aria-roledescription="carrossel"] img').length).toBe(3);
+    component.proximoSlide();
+    fixture.detectChanges();
+    expect(component.slideAtual).toBe(1);
+    expect(fixture.nativeElement.textContent).toContain(component.slidesCarrossel[1].titulo);
+    component.slideAnterior();
+    expect(component.slideAtual).toBe(0);
+  });
 });

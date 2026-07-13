@@ -15,6 +15,13 @@ export class Dashboard implements OnInit {
   resumo: DashboardResumo = { total: 0, leve: 0, moderada: 0, prioritaria: 0, acoesPendentes: 0, casosComMelhora: 0, frequenciaMedia: 0 };
   alunosPrioritarios: Aluno[] = [];
   compromissosSemana: Compromisso[] = [];
+  readonly slidesCarrossel = [
+    { imagem: '/img/Carrossel_imagem1.png', alt: 'Estudantes trabalhando juntos em sala de aula', titulo: 'Aprendizagem colaborativa', descricao: 'Conexões que fortalecem o aprendizado e a permanência escolar.' },
+    { imagem: '/img/Carrossel_Imagem2.png', alt: 'Grupo de estudantes reunido em atividade escolar', titulo: 'Tecnologia e protagonismo', descricao: 'Novas formas de aprender, participar e construir conhecimento.' },
+    { imagem: '/img/Carrossel_Imagem3.png', alt: 'Estudante conversando com profissional da equipe escolar', titulo: 'Acompanhamento que transforma', descricao: 'Escuta, acolhimento e ações pedagógicas no momento certo.' }
+  ];
+  slideAtual = 0;
+  private intervaloCarrossel?: ReturnType<typeof setInterval>;
 
   public barChartData: ChartConfiguration<'bar'>['data'] = { labels: ['LEVE', 'MOD', 'PRIO'], datasets: [{ data: [0, 0, 0], backgroundColor: ['#16a34a', '#fbbf24', '#dc2626'], borderRadius: 4, barThickness: 40 }] };
   public barChartOptions: ChartOptions<'bar'> = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, border: { display: false } } } };
@@ -35,7 +42,19 @@ export class Dashboard implements OnInit {
     this.barChartData = { ...this.barChartData, datasets: [{ ...this.barChartData.datasets[0], data: [resumo.leve, resumo.moderada, resumo.prioritaria] }] };
     const faltas = [0, 1, 2, 3].map(i => Math.round(alunos.reduce((s, a) => s + (100 - (a.tendenciaFrequencia[i] ?? a.frequencia)), 0) / Math.max(alunos.length, 1)));
     this.lineChartData = { ...this.lineChartData, datasets: [{ ...this.lineChartData.datasets[0], data: faltas }] };
+    if (typeof window !== 'undefined') this.iniciarCarrossel();
+    this.destroyRef.onDestroy(() => this.pararCarrossel());
   }
+
+  slideAnterior(): void { this.selecionarSlide(this.slideAtual - 1); }
+  proximoSlide(): void { this.selecionarSlide(this.slideAtual + 1); }
+  selecionarSlide(indice: number): void {
+    const total = this.slidesCarrossel.length;
+    this.slideAtual = (indice + total) % total;
+    this.cdr.markForCheck();
+  }
+  pausarCarrossel(): void { this.pararCarrossel(); }
+  retomarCarrossel(): void { this.iniciarCarrossel(); }
 
   iniciais(nome?: string): string { return nome ? nome.split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase() : '--'; }
   principalMotivo(aluno?: Aluno): string { return aluno?.motivos[0] ?? 'Acompanhamento preventivo'; }
@@ -52,6 +71,14 @@ export class Dashboard implements OnInit {
     const fimData = new Date(); fimData.setDate(fimData.getDate() + 7);
     const fim = this.iso(fimData);
     this.compromissosSemana = compromissos.filter(item => !item.concluido && item.data >= inicio && item.data <= fim).sort((a, b) => `${a.data}${a.hora}`.localeCompare(`${b.data}${b.hora}`)).slice(0, 3);
+  }
+  private iniciarCarrossel(): void {
+    this.pararCarrossel();
+    this.intervaloCarrossel = setInterval(() => this.proximoSlide(), 6000);
+  }
+  private pararCarrossel(): void {
+    if (this.intervaloCarrossel) clearInterval(this.intervaloCarrossel);
+    this.intervaloCarrossel = undefined;
   }
   private iso(data: Date): string { return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`; }
 }

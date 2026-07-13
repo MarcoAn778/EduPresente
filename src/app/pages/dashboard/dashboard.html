@@ -1,4 +1,52 @@
 <div class="flex flex-col gap-6 w-full max-w-screen-2xl mx-auto">
+  <section
+    class="relative h-44 sm:h-56 lg:h-64 rounded-xl overflow-hidden bg-slate-200 border border-slate-200 shadow-sm group"
+    role="region"
+    aria-roledescription="carrossel"
+    aria-label="Destaques do EduPresente"
+    (mouseenter)="pausarCarrossel()"
+    (mouseleave)="retomarCarrossel()"
+    (focusin)="pausarCarrossel()"
+    (focusout)="retomarCarrossel()"
+  >
+    <img
+      *ngFor="let slide of slidesCarrossel; let indice = index"
+      [src]="slide.imagem"
+      [alt]="slide.alt"
+      [attr.aria-hidden]="slideAtual !== indice"
+      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+      [ngClass]="slideAtual === indice ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+    />
+
+    <div class="absolute inset-0 bg-gradient-to-r from-[#071e3d]/85 via-[#071e3d]/35 to-transparent pointer-events-none"></div>
+    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/55 to-transparent pointer-events-none"></div>
+
+    <div class="absolute left-5 sm:left-8 bottom-8 sm:bottom-10 right-14 text-white z-10">
+      <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-[#86efac] mb-1">EduPresente</p>
+      <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">{{ slidesCarrossel[slideAtual].titulo }}</h1>
+      <p class="hidden sm:block text-xs sm:text-sm text-white/85 mt-1 max-w-xl">{{ slidesCarrossel[slideAtual].descricao }}</p>
+    </div>
+
+    <button type="button" (click)="slideAnterior()" aria-label="Imagem anterior" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-sm flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-all">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m15 18-6-6 6-6" /></svg>
+    </button>
+    <button type="button" (click)="proximoSlide()" aria-label="Próxima imagem" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-sm flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-all">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" /></svg>
+    </button>
+
+    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2" aria-label="Selecionar imagem">
+      <button
+        *ngFor="let slide of slidesCarrossel; let indice = index"
+        type="button"
+        (click)="selecionarSlide(indice)"
+        [attr.aria-label]="'Mostrar imagem ' + (indice + 1)"
+        [attr.aria-current]="slideAtual === indice ? 'true' : null"
+        class="h-2 rounded-full border border-white/80 transition-all"
+        [ngClass]="slideAtual === indice ? 'w-6 bg-white' : 'w-2 bg-white/45 hover:bg-white/80'"
+      ></button>
+    </div>
+  </section>
+
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
     <a
       routerLink="/app/alunos"
