@@ -142,38 +142,11 @@ npm start
 Quando `supabaseUrl` e `supabaseAnonKey` estiverem vazios, o projeto utiliza dados fictícios e o acesso local abaixo:
 
 ```text
-E-mail: coordenador@escola.com
+E-mail: coordenador@escolapromove.com
 Senha: 123456
 ```
 
 Essas credenciais existem apenas para demonstração. Elas não devem ser utilizadas como mecanismo de autenticação em produção.
-
-## Configurar o Supabase
-
-Edite o arquivo local `src/environments/environment.ts`:
-
-```ts
-export const environment = {
-  production: false,
-  supabaseUrl: 'https://SEU-PROJETO.supabase.co',
-  supabaseAnonKey: 'SUA-CHAVE-ANONIMA'
-};
-```
-
-Depois, execute as migrations da pasta `supabase/migrations` no projeto Supabase e crie os usuários que poderão acessar a aplicação.
-
-### Observação importante sobre chaves
-
-A `supabaseAnonKey` é uma chave pública destinada ao frontend. Ela será incluída no JavaScript compilado e poderá ser visualizada por quem acessar a aplicação, mesmo que o arquivo `environment.ts` não esteja no GitHub.
-
-A segurança dos dados depende de:
-
-- autenticação dos usuários;
-- policies de Row Level Security;
-- permissões concedidas às roles `anon` e `authenticated`;
-- validações, constraints e regras no banco.
-
-Nunca coloque a chave `service_role`, senhas, tokens privados ou credenciais administrativas no frontend. A `service_role` ignora o RLS e deve existir somente em ambientes seguros de backend.
 
 ## Rotas
 
